@@ -58,6 +58,9 @@ func NewClient(config Config) Client {
 
 	client = &http.Client{
 		Transport: config.Transport,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		},
 	}
 
 	transport = config.Transport
@@ -159,6 +162,9 @@ func (c Client) makeRequest(request *http.Request) (*http.Response, error) {
 		}
 
 		httpClient := conf.Client(ctx)
+		httpClient.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+			return http.ErrUseLastResponse
+		}
 		return httpClient.Do(request)
 	} else {
 		request.SetBasicAuth(c.config.Username, c.config.Password)
