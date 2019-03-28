@@ -33,6 +33,16 @@ type manifest struct {
 		Name    string `yaml:"name"`
 		Version string `yaml:"version"`
 	} `yaml:"releases"`
+	Variables []struct {
+		Name    string `yaml:"name"`
+		Type    string `yaml:"type"`
+		Options struct {
+			IsCA             bool     `yaml:"is_ca,omitempty"`
+			CommonName       string   `yaml:"common_name,omitempty"`
+			CA               string   `yaml:"ca,omitempty"`
+			ExtendedKeyUsage []string `yaml:"extended_key_usage,omitempty"`
+		} `yaml:"options,omitempty"`
+	} `yaml:"variables"`
 }
 
 func (c Client) ResolveManifestVersionsV2(manifestYAML []byte) ([]byte, error) {
